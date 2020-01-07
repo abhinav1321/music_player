@@ -30,7 +30,7 @@ class VlcPlayer:
         self.p.audio_set_volume(int(volume))
 
 
-obj = VlcPlayer(filename='song3.mp3')
+obj = VlcPlayer(filename='music/song3.mp3')
 obj.play()
 timeout = time.time() + 20
 

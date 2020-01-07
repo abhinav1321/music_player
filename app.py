@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox, filedialog
+import mp3info
 
 import vlc
 
@@ -10,9 +11,9 @@ filename = 'music/song1.mp3'
 flag = 0
 
 root = Tk()
-root.geometry('400x300')
+root.geometry('600x500')
 root.title("Music Streamer")
-root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='play.png'))
+root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='icons/play.png'))
 
 text = Label(root, text="Welcome to The Music-World").pack()
 
@@ -29,6 +30,11 @@ def browse():
     global filename
     filename = filedialog.askopenfilename()
     status_bar['text'] = "Selected Song - " + str(filename.split('/')[-1]) + " -- Click Play button to play"
+
+def change(photo_frame):
+    new = PhotoImage(file='img1.jpg')
+    photo_frame.configure(image=new)
+    photo_frame.photo=new
 
 
 
@@ -74,6 +80,9 @@ def play_music():
         try:
             p.play()
             status_bar['text'] = 'Playing Song - ' + str(filename.split('/')[-1])
+            mp3info.info(filename)
+            change(photo_frame)
+
         except:
             pass
     except:
@@ -83,6 +92,10 @@ def play_music():
         try:
             p.play()
             status_bar['text'] = 'Playing Song - ' + str(filename.split('/')[-1])
+            mp3info.info(filename)
+            change(photo_frame)
+
+
         except:
             pass
 
@@ -94,35 +107,46 @@ def set_vol(val):
         pass
 
 
-frame = Frame(root, height="200", width="200", bg="green")
+detail_frame = Frame(root,height='300',width='100')
+song_photo = PhotoImage(file='default.png')
+song_photo.zoom(20,20)
+photo_frame = Label(detail_frame, image=song_photo)
 
-play_photo = PhotoImage(file='play.png')
-play_btn = Button(frame, image=play_photo, command=play_music)
+
+button_frame = Frame(root, height="400", width="300", bg="green")
+
+play_photo = PhotoImage(file='icons/play.png')
+play_btn = Button(button_frame, image=play_photo, command=play_music)
 play_btn.pack(side=LEFT)
 
-pause_photo = PhotoImage(file='pause.png')
-pause_btn = Button(frame, image=pause_photo, command=pause_music)
+
+
+pause_photo = PhotoImage(file='icons/pause.png')
+pause_btn = Button(button_frame, image=pause_photo, command=pause_music)
 pause_btn.pack(side=LEFT)
 
-stop_photo = PhotoImage(file='stop.png')
-stop_btn = Button(frame, image=stop_photo, command=stop_music)
+stop_photo = PhotoImage(file='icons/stop.png')
+stop_btn = Button(button_frame, image=stop_photo, command=stop_music)
 stop_btn.pack(side=LEFT)
 
 
-frame1 = Frame(root, height="20", width="300")
-volume_photo = PhotoImage(file='volu.png')
-Label(frame1, image=volume_photo).pack(side=LEFT)
-scale = Scale(frame1, from_=0, to=100, orient=HORIZONTAL,relief=SUNKEN, command=set_vol)
+scale_frame1 = Frame(root, height="20", width="300")
+volume_photo = PhotoImage(file='icons/volu.png')
+Label(scale_frame1, image=volume_photo).pack(side=LEFT)
+scale = Scale(scale_frame1, from_=0, to=100, orient=HORIZONTAL, relief=SUNKEN, command=set_vol)
 scale.pack(side=LEFT)
 scale.set(50)
+
+
 
 status_bar = Label(root, text='Open a file to Play', relief=SUNKEN, anchor=W)
 
 status_bar.pack(side=BOTTOM,fill=X)
 Label(root, text='').pack(fill=X, side=BOTTOM)
-frame.pack(side=BOTTOM)
-frame1.pack(side=BOTTOM)
-
+button_frame.pack(side=BOTTOM)
+scale_frame1.pack(side=BOTTOM)
+photo_frame.pack(side=RIGHT)
+detail_frame.pack(side=BOTTOM)
 
 root.mainloop()
 
