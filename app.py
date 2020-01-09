@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox, filedialog
 import mp3info
+import time
 
 import vlc
 
@@ -10,12 +11,14 @@ import vlc
 filename = 'music/song1.mp3'
 flag = 0
 
+
 root = Tk()
 root.geometry('600x500')
 root.title("Music Streamer")
 root.tk.call('wm', 'iconphoto', root._w, PhotoImage(file='icons/play.png'))
 
 text = Label(root, text="Welcome to The Music-World").pack()
+
 
 
 def message():
@@ -32,7 +35,15 @@ def browse():
     status_bar['text'] = "Selected Song - " + str(filename.split('/')[-1]) + " -- Click Play button to play"
 
 def change(photo_frame):
+    info=mp3info.info(filename)
+    title1['text']=info['title']
+    title0['text']='TITLE:'
+    artist0['text']='ARTIST:'
+    artist1['text']=info['artist']
+    album0['text']='ALBUM:'
+    album1['text']=info['album']
     new = PhotoImage(file='img1.jpg')
+    new = new.subsample(2,2)
     photo_frame.configure(image=new)
     photo_frame.photo=new
 
@@ -75,13 +86,13 @@ def play_music():
     try:
         global p
         p.stop()
-
         p = vlc.MediaPlayer(filename)
+
         try:
             p.play()
             status_bar['text'] = 'Playing Song - ' + str(filename.split('/')[-1])
             mp3info.info(filename)
-            change(photo_frame)
+            change(photo_label)
 
         except:
             pass
@@ -91,13 +102,15 @@ def play_music():
         p = vlc.MediaPlayer(filename)
         try:
             p.play()
+
             status_bar['text'] = 'Playing Song - ' + str(filename.split('/')[-1])
             mp3info.info(filename)
-            change(photo_frame)
-
+            change(photo_label)
 
         except:
             pass
+
+
 
 def set_vol(val):
     volume = int(val)
@@ -106,12 +119,46 @@ def set_vol(val):
     except:
         pass
 
+def audio_slider(val):
+    length=p.get_length()
+    print(length)
+    unit=int(length/1000)
+    new_length=unit*int(val)
+    p.set_time(new_length*10)
+    new_time = time.strftime('%H:%M:%S', time.gmtime(new_length))
+    time_label['text'] = str(new_time)
+
+
+
+def time_slider():
+    set_new=int(100*p.get_time()/p.get_length())
+    scale1.set(set_new)
+
+
+
 
 detail_frame = Frame(root,height='300',width='100')
-song_photo = PhotoImage(file='default.png')
-song_photo.zoom(20,20)
-photo_frame = Label(detail_frame, image=song_photo)
+photo_frame = Frame(detail_frame)
+text_frame = Frame(detail_frame)
 
+song_photo = PhotoImage(file='default.png')
+song_photo=song_photo.subsample(3,3)
+photo_label = Label(photo_frame, image=song_photo)
+photo_label.pack()
+
+
+title0 = Label(text_frame,text='',font='Helvetica 18 bold')
+title1 = Label(text_frame,text='')
+
+artist0 = Label(text_frame, text='',font='Helvetica 18 bold')
+artist1 = Label(text_frame, text='')
+
+album0 = Label(text_frame, text='',font='Helvetica 18 bold')
+album1 = Label(text_frame, text='')
+
+title0.pack(), title1.pack(), artist0.pack(), artist1.pack(), album0.pack(), album1.pack()
+photo_frame.pack(side=RIGHT)
+text_frame.pack(side=RIGHT)
 
 button_frame = Frame(root, height="400", width="300", bg="green")
 
@@ -137,16 +184,27 @@ scale = Scale(scale_frame1, from_=0, to=100, orient=HORIZONTAL, relief=SUNKEN, c
 scale.pack(side=LEFT)
 scale.set(50)
 
+scale_frame2 = Frame(root)
+time_label=Label(scale_frame2,text="00:00",anchor=W)
+time_label.pack(side=LEFT)
+scale1 = Scale(scale_frame2,orient=HORIZONTAL,  length=600,command=audio_slider)
+
+scale1.pack()
+
 
 
 status_bar = Label(root, text='Open a file to Play', relief=SUNKEN, anchor=W)
 
 status_bar.pack(side=BOTTOM,fill=X)
 Label(root, text='').pack(fill=X, side=BOTTOM)
+scale_frame2.pack(side=BOTTOM)
 button_frame.pack(side=BOTTOM)
 scale_frame1.pack(side=BOTTOM)
 photo_frame.pack(side=RIGHT)
 detail_frame.pack(side=BOTTOM)
+
+
+
 
 root.mainloop()
 
