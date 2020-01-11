@@ -3,6 +3,7 @@ from tkinter import messagebox, filedialog
 import mp3info
 import time
 
+
 import vlc
 
 # from pygame import mixer
@@ -47,6 +48,47 @@ def change(photo_frame):
     photo_frame.configure(image=new)
     photo_frame.photo=new
 
+def song_list():
+
+    try:
+        import scraping
+        list = scraping.top_songs()
+        # print(list)
+        new_window=Tk()
+        new_window.title('TOP 20 SONGS')
+        for i,song in enumerate(list):
+            song_var=''
+            print(song[0])
+            frame =Frame(new_window)
+            song_lbl=Label(frame,text='SONG- '+str(song[0]),anchor=W,relief=SUNKEN)
+            desc_lbl=Label(frame,text='    Description- '+str(song[1]),anchor=W)
+            song_var=song[0]
+
+            def combine_funcs(*funcs):
+                def combined_func(*args, **kwargs):
+                    for f in funcs:
+                        f(*args, **kwargs)
+
+                return combined_func
+
+            def button_check(buttonName):
+                buttonVal = buttonName
+                print(buttonVal)
+
+                # button=Button(frame,text='Download'+str(song_var),command=lambda :scraping.download(song_var))
+            button = Button(frame, text='Download'+str(song_var), command=combine_funcs(lambda :scraping.download(song_var), lambda
+                buttonName='Download'+str(song_var): button_check(buttonName)))
+
+            song_lbl.pack(side=LEFT)
+            desc_lbl.pack(side=LEFT)
+            button.pack(side=LEFT)
+            frame.pack(side=TOP)
+
+        new_window.mainloop()
+
+
+    except Exception as e:
+        print(e)
 
 
 # Menu Bar
@@ -64,7 +106,10 @@ menu_bar.add_cascade(label='Help!', menu=submenu)
 submenu.add_command(label='About Us',
                     command=message)
 
-
+submenu = Menu(menu_bar,tearoff=0)
+menu_bar.add_cascade(label='Weekly TOP 20', menu=submenu)
+submenu.add_command(label='Search',
+                    command=song_list)
 
 
 
@@ -94,6 +139,8 @@ def play_music():
             mp3info.info(filename)
             change(photo_label)
 
+
+
         except:
             pass
     except:
@@ -106,6 +153,8 @@ def play_music():
             status_bar['text'] = 'Playing Song - ' + str(filename.split('/')[-1])
             mp3info.info(filename)
             change(photo_label)
+
+
 
         except:
             pass
@@ -133,7 +182,6 @@ def audio_slider(val):
 def time_slider():
     set_new=int(100*p.get_time()/p.get_length())
     scale1.set(set_new)
-
 
 
 
@@ -204,7 +252,13 @@ photo_frame.pack(side=RIGHT)
 detail_frame.pack(side=BOTTOM)
 
 
-
-
 root.mainloop()
+
+
+
+
+
+
+
+
 
