@@ -1,11 +1,12 @@
 # music_player
-A music Player made with Python Tkinter and python-VLC
+A music Player made with Python Tkinter, python-VLC, BeautifulSoup4
 
 Libraries used:
 Python Tkinter, Python-VLC
 
 Functions: 
 . It can Play Music Using GUI and Python VLC
-. Search for New Music using WebScraping 
+. Get and Display Song Metadata on Screen with MP3 Libraries
+. Search for New Music using WebScraping using BeautifulSoup4
   and Download Top-20 Hits of the current time.
 
