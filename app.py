@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox, filedialog
 import mp3info
 import time
-
+from functools import partial
 
 import vlc
 
@@ -11,6 +11,9 @@ import vlc
 
 filename = 'music/song1.mp3'
 flag = 0
+
+list_of_songs = []
+
 
 
 root = Tk()
@@ -48,41 +51,34 @@ def change(photo_frame):
     photo_frame.configure(image=new)
     photo_frame.photo=new
 
+
+
+
 def song_list():
 
     try:
+
         import scraping
-        list = scraping.top_songs()
+        to_list = scraping.top_songs()
         # print(list)
         new_window=Tk()
-        new_window.title('TOP 20 SONGS')
-        for i,song in enumerate(list):
-            song_var=''
+        new_window.title('TOP 10 SONGS')
+
+        for i, song in enumerate(to_list):
+            song_var = ''
             print(song[0])
             frame =Frame(new_window)
-            song_lbl=Label(frame,text='SONG- '+str(song[0]),anchor=W,relief=SUNKEN)
-            desc_lbl=Label(frame,text='    Description- '+str(song[1]),anchor=W)
-            song_var=song[0]
-
-            def combine_funcs(*funcs):
-                def combined_func(*args, **kwargs):
-                    for f in funcs:
-                        f(*args, **kwargs)
-
-                return combined_func
-
-            def button_check(buttonName):
-                buttonVal = buttonName
-                print(buttonVal)
-
-                # button=Button(frame,text='Download'+str(song_var),command=lambda :scraping.download(song_var))
-            button = Button(frame, text='Download'+str(song_var), command=combine_funcs(lambda :scraping.download(song_var), lambda
-                buttonName='Download'+str(song_var): button_check(buttonName)))
+            song_lbl = Label(frame,text='SONG- '+str(song[0]),anchor=W,relief=SUNKEN)
+            desc_lbl = Label(frame,text='    Description- '+str(song[1]),anchor=W)
+            song_var = song[0]
 
             song_lbl.pack(side=LEFT)
             desc_lbl.pack(side=LEFT)
-            button.pack(side=LEFT)
             frame.pack(side=TOP)
+
+        button = Button(new_window, text='Download Songs:',
+                        command=lambda: scraping.download())
+        button.pack(side=TOP)
 
         new_window.mainloop()
 
@@ -110,7 +106,6 @@ submenu = Menu(menu_bar,tearoff=0)
 menu_bar.add_cascade(label='Weekly TOP 20', menu=submenu)
 submenu.add_command(label='Search',
                     command=song_list)
-
 
 
 def stop_music():
