@@ -8,5 +8,5 @@ Functions:
 . It can Play Music Using GUI and Python VLC
 . Get and Display Song Metadata on Screen with MP3 Libraries
 . Search for New Music using WebScraping using BeautifulSoup4
-  and Download Top-20 Hits of the current time.
+  and Download Top-10 Hits of the current time.
 
