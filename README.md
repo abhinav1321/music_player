@@ -9,5 +9,11 @@ Functions:
 . Get and Display Song Metadata on Screen with MP3 Libraries
 . Search for New Music using WebScraping using BeautifulSoup4
   and Download Top-10 Hits of the current time.
+  
+  
+  ![Screenshot_Player](https://github.com/abhinav1321/music_player/blob/master/player.png)
+
+![Screenshot_Explorer](https://github.com/abhinav1321/music_player/blob/master/explorer.png)
+
 
 ![Screenshot](https://github.com/abhinav1321/music_player/blob/master/downloader.png)
