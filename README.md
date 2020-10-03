@@ -10,3 +10,4 @@ Functions:
 . Search for New Music using WebScraping using BeautifulSoup4
   and Download Top-10 Hits of the current time.
 
+![Screenshot](https://github.com/abhinav1321/music_player/blob/master/downloader.png)
